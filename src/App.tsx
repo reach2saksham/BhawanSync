@@ -23,17 +23,25 @@ import { NfcActionModal } from './components/NfcActionModal';
 import { SemesterAdminModal } from './components/SemesterAdminModal';
 import { EmergencyModal } from './components/EmergencyModal';
 
-const STORAGE_KEY_CONFIG = 'bhawansync_semester_config_v1';
-const STORAGE_KEY_LOGS = 'bhawansync_worker_logs_v1';
-const STORAGE_KEY_MACHINES = 'bhawansync_laundry_machines_v1';
-const STORAGE_KEY_SOUND = 'bhawansync_sound_enabled_v1';
+const STORAGE_KEY_CONFIG = 'bhawansync_semester_config_v2';
+const STORAGE_KEY_LOGS = 'bhawansync_worker_logs_v2';
+const STORAGE_KEY_MACHINES = 'bhawansync_laundry_machines_v2';
+const STORAGE_KEY_SOUND = 'bhawansync_sound_enabled_v2';
 
 export function App() {
   // Semester Configuration
   const [config, setConfig] = useState<SemesterConfig>(() => {
     try {
+      // Clear legacy cache from v1
+      localStorage.removeItem('bhawansync_semester_config_v1');
       const saved = localStorage.getItem(STORAGE_KEY_CONFIG);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.bhawanName === 'Aryabhata Bhawan') {
+          parsed.bhawanName = 'Ravindra Bhawan';
+        }
+        return parsed;
+      }
     } catch {
       // ignore
     }
@@ -43,6 +51,7 @@ export function App() {
   // Worker NFC Presence Logs
   const [workerLogs, setWorkerLogs] = useState<WorkerLogEntry[]>(() => {
     try {
+      localStorage.removeItem('bhawansync_worker_logs_v1');
       const saved = localStorage.getItem(STORAGE_KEY_LOGS);
       if (saved) return JSON.parse(saved);
     } catch {
@@ -54,6 +63,7 @@ export function App() {
   // Laundry Machines Status
   const [laundryMachines, setLaundryMachines] = useState<LaundryMachine[]>(() => {
     try {
+      localStorage.removeItem('bhawansync_laundry_machines_v1');
       const saved = localStorage.getItem(STORAGE_KEY_MACHINES);
       if (saved) return JSON.parse(saved);
     } catch {
@@ -194,8 +204,11 @@ export function App() {
     setWorkerLogs(INITIAL_WORKER_LOGS);
     setLaundryMachines(INITIAL_LAUNDRY_MACHINES);
     localStorage.removeItem(STORAGE_KEY_CONFIG);
+    localStorage.removeItem('bhawansync_semester_config_v1');
     localStorage.removeItem(STORAGE_KEY_LOGS);
+    localStorage.removeItem('bhawansync_worker_logs_v1');
     localStorage.removeItem(STORAGE_KEY_MACHINES);
+    localStorage.removeItem('bhawansync_laundry_machines_v1');
   };
 
   return (
