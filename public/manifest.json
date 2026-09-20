@@ -1,0 +1,18 @@
+{
+  "name": "BhawanSync — Hostel Timing & Staff NFC Portal",
+  "short_name": "BhawanSync",
+  "description": "Hostel timing management, warden contacts, mess status, laundry schedule, emergency SOS and staff NFC tracking.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
